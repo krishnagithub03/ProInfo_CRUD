@@ -26,9 +26,9 @@ const getTask = async (req,res) =>{
 
 //POST
 const createTask = async (req,res)=>{
-    const {title,description,status} = req.body;
+    const {title,description} = req.body;
     try{
-        await taskModel.create({title,description,status});
+        await taskModel.create({title,description});
         res.json({message:"Task created successfully"});
     } catch(err){
         if(!title || !description){

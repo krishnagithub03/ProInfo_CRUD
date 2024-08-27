@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 require('dotenv').config();
 const connectToMongoDB = require('./connection');
 const taskRouter = require('./routes/task');
@@ -12,7 +13,7 @@ connectToMongoDB(process.env.MONGO_URL);
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-
+app.use(cors());
 
 
 //routing
