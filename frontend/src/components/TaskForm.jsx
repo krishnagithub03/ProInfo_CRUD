@@ -24,7 +24,7 @@ const TaskForm = () => {
         console.log(task);
 
         try{
-        const res = await fetch(`http://localhost:8000/${id}`,{
+        const res = await fetch(`https://proinfo-crud.onrender.com/${id}`,{
             method:'PATCH',
             headers:{
                 'Content-Type':'application/json',
@@ -62,7 +62,7 @@ const TaskForm = () => {
         const task = {title,description};
         console.log(task);
 
-        const res = await fetch('http://localhost:8000/',{
+        const res = await fetch('https://proinfo-crud.onrender.com/',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',

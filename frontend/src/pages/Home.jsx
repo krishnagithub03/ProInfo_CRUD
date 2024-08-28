@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(()=>{
     const fetchTasks = async () =>{
       try{
-      const res = await fetch('http://localhost:8000/',{
+      const res = await fetch('https://proinfo-crud.onrender.com/',{
         headers: {
           'Authorization' : `Bearer ${user.token}`
         }

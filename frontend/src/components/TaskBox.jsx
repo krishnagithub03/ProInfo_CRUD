@@ -21,7 +21,7 @@ const TaskBox = ({task}) => {
         return;
       }
       try{
-       const res = await fetch(`http://localhost:8000/${task._id}`,{
+       const res = await fetch(`https://proinfo-crud.onrender.com/${task._id}`,{
             method:'DELETE',
             headers:{
             'Authorization' : `Bearer ${user.token}`
