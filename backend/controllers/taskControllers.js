@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 
 // GET all
 const getTasks = async (req,res)=>{
+    const user_id = req.user._id;
     try{
-    const Tasks = await taskModel.find({}).sort({createdAt:-1});
+    const Tasks = await taskModel.find({user_id}).sort({createdAt:-1});
     res.status(200).json(Tasks);
     } catch(err){
         res.status(404).json({error:"Tasks not found"});
@@ -28,8 +29,10 @@ const getTask = async (req,res) =>{
 const createTask = async (req,res)=>{
     const {title,description} = req.body;
     try{
-        await taskModel.create({title,description});
-        res.json({message:"Task created successfully"});
+        const user_id = req.user._id;
+        const task = await taskModel.create({title,description,user_id});
+        res.status(201).json(task);
+        console.log("Task Created");
     } catch(err){
         if(!title || !description){
             res.status(400).json({error:"All fields are required"});
@@ -45,7 +48,7 @@ const updateTask = async (req,res)=>{
 
     try{
         const task = await taskModel.findByIdAndUpdate({_id:id},{...req.body},{new:true});
-        res.json({message:"Task updated successfully"});
+        res.status(200).json(task);
     } catch(err){
         if(!mongoose.Types.ObjectId.isValid({_id:id})){
             res.status(404).json({error:"Task not found"});
@@ -63,8 +66,8 @@ const deleteTask = async(req,res)=>{
     //     res.status(404).json({error:"Task not found"});
     // }
     try{
-    await taskModel.findByIdAndDelete({_id:id});
-    res.json({message:"Task deleted successfully"});
+    const task = await taskModel.findByIdAndDelete({_id:id});
+    res.status(200).json(task);
     } catch(err){
         res.status(404).json({error:err.message});
     }

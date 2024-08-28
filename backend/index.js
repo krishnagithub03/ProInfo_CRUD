@@ -17,8 +17,8 @@ app.use(cors());
 
 
 //routing
-app.use('/',taskRouter);
 app.use('/user',userRouter);
+app.use('/',taskRouter);
 
 
 //listening

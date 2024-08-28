@@ -1,4 +1,6 @@
-import {useState} from 'react'
+import {useState, useContext} from 'react'
+import {TaskContext} from '../context/taskContext';
+import { AuthContext } from '../context/AuthContext';
 
 const TaskForm = () => {
     const [title, setTitle] = useState('');
@@ -6,20 +8,27 @@ const TaskForm = () => {
     const [id, setId] = useState('');
     const [error,setError] = useState(null);
 
+    const {dispatch} = useContext(TaskContext);
+    const {user} = useContext(AuthContext);
+
     const handleUpdate = async (e) =>{
         e.preventDefault();
-        if(!id){
-            setError('Id is required for updation');
+        if(!user){
+            setError("You Must be logged in");
             return;
         }
-
-        const task = {title,description,id};
+        if(!id){
+            setError('Id is required for updation');
+        }
+        const task = {title,description};
         console.log(task);
 
+        try{
         const res = await fetch(`http://localhost:8000/${id}`,{
             method:'PATCH',
             headers:{
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization' : `Bearer ${user.token}`
             },
             body: JSON.stringify(task)
         })
@@ -27,19 +36,28 @@ const TaskForm = () => {
         const json = await res.json();
         if(!res.ok){
             setError(json.error);
+            return;
         }
         if(res.ok){
             setError(null);
             setTitle('');
             setDescription('');
             setId('');
+            dispatch({type:'UPDATE_TASK',payload:json});
 
             console.log('task updated',json);
         }
+    } catch(err){
+        console.error(err);
+    }
     }
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
+        if(!user){
+            setError('You Must Be Logged in');
+            return;
+        }
 
         const task = {title,description};
         console.log(task);
@@ -47,7 +65,8 @@ const TaskForm = () => {
         const res = await fetch('http://localhost:8000/',{
             method:'POST',
             headers:{
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization' : `Bearer ${user.token}`
             },
             body: JSON.stringify(task)
         })
@@ -61,6 +80,7 @@ const TaskForm = () => {
             setTitle('');
             setDescription('');
             setId('');
+            dispatch({type:'ADD_TASK',payload:json});
 
             console.log('new task added',json);
         }
@@ -94,7 +114,6 @@ const TaskForm = () => {
          
         
         <button type="submit">Add/Update Task</button>
-        {/* <button type='submit'>Update Task</button> */}
 
         {error && <div className='error'>{error}</div>}
       

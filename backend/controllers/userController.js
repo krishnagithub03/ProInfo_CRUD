@@ -1,41 +1,36 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const handleLogin = async()=>{
-    const {email,password} = req.body;
-    if(!email || !password){
-        res.status(400).json({error:"All fields are required"});
-    }
-    const user = await User.findOne({email,password});
-    if(!user){
-        res.status(400).json({error:"Invalid credentials"});
-    }
-    return res.redirect('/');
+const createToken = ({_id})=>{
+    return jwt.sign({_id},process.env.SIGNATURE,{expiresIn : '4d'});
+}
+
+const handleLogin = async(req,res)=>{
+    const {email, password} = req.body
+
+  try {
+    const user = await User.login(email, password)
+
+    // create a token
+    const token = createToken(user._id)
+
+    res.status(200).json({email, token})
+  } catch (error) {
+    res.status(400).json({error: error.message})
+  }
 }
 
 const handleSignup = async(req,res)=>{
-    const {name,email,password} = req.body;
-    if(!name || !email || !password){
-        res.status(400).json({error:"All fields are required"});
-    }
-    if(password.length < 6){
-        res.status(400).json({error:"Password must be atleast 6 characters long"});
-    }
-    if(email.indexOf('@') === -1){
-        res.status(400).json({error:"Invalid email"});
-    }
-    //check if user already exists
-    const user = await User.findOne({email});
-    if(!user){
-    await User.create({
-        name:name,
-        email:email,
-        password:password
-    });
-    res.send('login');
-    }
-    else{
-       return res.status(400).json({error:"User Exists"});
-    }
+    const {email, password} = req.body
+
+  try {
+    const user = await User.signup(email, password)
+    const token = createToken(user._id);
+    res.status(200).json({email, token})
+  } catch (error) {
+    res.status(400).json({error: error.message})
+  }
 }
 
 module.exports = {handleLogin,handleSignup};

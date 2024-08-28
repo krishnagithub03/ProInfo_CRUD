@@ -1,8 +1,12 @@
-import {useState} from 'react'
+import {useState, useContext} from 'react'
 import { Copy, ClipboardCheck } from 'lucide-react';
+import { TaskContext } from '../context/taskContext';
+import { AuthContext } from '../context/AuthContext';
 
 const TaskBox = ({task}) => {
     const [isHovered, setIsHovered] = useState(false);
+    const {user} = useContext(AuthContext);
+
     const copyToClip = () =>{
          try {
           navigator.clipboard.writeText(task._id);
@@ -10,6 +14,29 @@ const TaskBox = ({task}) => {
         } catch {
           alert("Invalid Request");
         }
+    }
+    const {dispatch} = useContext(TaskContext);
+    const handleDelete = async()=>{ 
+      if(!user){
+        return;
+      }
+      try{
+       const res = await fetch(`http://localhost:8000/${task._id}`,{
+            method:'DELETE',
+            headers:{
+            'Authorization' : `Bearer ${user.token}`
+            }
+        })
+
+        const json = await res.json();
+
+        if(res.ok){
+            dispatch({type:'DELETE_TASK',payload:json});
+            console.log('task Deleted',json);
+        }
+      } catch(err){
+        console.error(err);
+      }
     }
   return (
     <div className='task-details'>
@@ -30,7 +57,7 @@ const TaskBox = ({task}) => {
         </p>
         </p>
         
-        <button className='btn'>Delete</button>
+        <button className='btn' onClick={handleDelete}>Delete</button>
     </div>
   )
 }

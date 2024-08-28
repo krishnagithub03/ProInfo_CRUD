@@ -25,6 +25,9 @@ header .container {
   justify-content: space-between;
   font-size: x-large;
 }
+.navemail{
+  font-size: medium;
+}
 
 header a {
   color: #1c53eb;
@@ -78,10 +81,13 @@ header a {
   top: 20px;
   right: 20px;
   cursor: pointer;
-  background: #f1f1f1;
-  padding: 6px;
-  border-radius: 50%;
-  color: #333;
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+    padding: 10px;
+    margin: 4px;
+    font-family: "new amsterdam", sans-serif;
+    border-radius: 4px;
 }
 label,
 input {
@@ -117,3 +123,33 @@ div.error {
   border-radius: 4px;
   margin: 20px 0;
 }
+
+ nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a {
+  margin-left: 10px;
+}
+nav button {
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: "new amsterdam", sans-serif;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 10px;
+}
+
+form.signup,
+form.login {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
+}
+
