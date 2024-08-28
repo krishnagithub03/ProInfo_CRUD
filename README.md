@@ -13,5 +13,4 @@ This project is built with the following technologies:
 
 Click the image below to watch the demo on YouTube:
 
-<iframe width="560" height="315" src="https://youtu.be/BUpuE8V9L_4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[![Watch the demo](https://img.youtube.com/vi/BUpuE8V9L_4/0.jpg)](https://www.youtube.com/watch?v=BUpuE8V9L_4)
